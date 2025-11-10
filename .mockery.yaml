@@ -1,0 +1,12 @@
+dir: .
+structname: "{{.InterfaceName}}_Mock"
+filename: "{{.InterfaceName}}.go"
+pkgname: mockcrash
+template: testify
+force-file-write: true
+template-data:
+  unroll-variadic: true
+packages:
+  github.com/kgadams/mockcrash:
+    config:
+      all: true
