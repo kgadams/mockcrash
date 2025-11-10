@@ -7,5 +7,5 @@ type Value struct {
 }
 
 type WithPtr interface {
-	Do(*Value) error
+	Do(*Value) (Value, error)
 }

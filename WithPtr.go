@@ -36,20 +36,29 @@ func (_m *WithPtr_Mock) EXPECT() *WithPtr_Mock_Expecter {
 }
 
 // Do provides a mock function for the type WithPtr_Mock
-func (_mock *WithPtr_Mock) Do(value *Value) error {
+func (_mock *WithPtr_Mock) Do(value *Value) (Value, error) {
 	ret := _mock.Called(value)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Do")
 	}
 
-	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(*Value) error); ok {
+	var r0 Value
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(*Value) (Value, error)); ok {
+		return returnFunc(value)
+	}
+	if returnFunc, ok := ret.Get(0).(func(*Value) Value); ok {
 		r0 = returnFunc(value)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(Value)
 	}
-	return r0
+	if returnFunc, ok := ret.Get(1).(func(*Value) error); ok {
+		r1 = returnFunc(value)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
 }
 
 // WithPtr_Mock_Do_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Do'
@@ -76,12 +85,12 @@ func (_c *WithPtr_Mock_Do_Call) Run(run func(value *Value)) *WithPtr_Mock_Do_Cal
 	return _c
 }
 
-func (_c *WithPtr_Mock_Do_Call) Return(err error) *WithPtr_Mock_Do_Call {
-	_c.Call.Return(err)
+func (_c *WithPtr_Mock_Do_Call) Return(value1 Value, err error) *WithPtr_Mock_Do_Call {
+	_c.Call.Return(value1, err)
 	return _c
 }
 
-func (_c *WithPtr_Mock_Do_Call) RunAndReturn(run func(value *Value) error) *WithPtr_Mock_Do_Call {
+func (_c *WithPtr_Mock_Do_Call) RunAndReturn(run func(value *Value) (Value, error)) *WithPtr_Mock_Do_Call {
 	_c.Call.Return(run)
 	return _c
 }
