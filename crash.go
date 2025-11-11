@@ -2,12 +2,18 @@ package mockcrash
 
 import (
 	"bytes"
+	"context"
 	"text/template"
 )
 
-func Execute(tplText string, vals map[string]any) (string, error) {
+type mockKey string
+
+var MockKey mockKey = "mockKey"
+
+func Execute(ctx context.Context, tplText string, vals map[string]any) (string, error) {
+	wp := ctx.Value(MockKey).(WithPtr)
 	tpl, err := template.New("tpl").Funcs(template.FuncMap{
-		"doit": func(wp WithPtr) (Value, error) {
+		"doit": func() (Value, error) {
 			return wp.Do(&Value{})
 		},
 	}).Option("missingkey=zero").Parse(tplText)

@@ -1,6 +1,8 @@
 package mockcrash
 
 import (
+	"context"
+
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	mock "github.com/stretchr/testify/mock"
@@ -23,9 +25,8 @@ var _ = Describe("Crash", func() {
 			Parameter: "anything",
 		}
 		mockPtr.EXPECT().Do(mock.Anything).Return(val, nil)
-		got, err := Execute(`{{ doit .ptr }}`, map[string]any{
-			"ptr": mockPtr,
-		})
+		ctx := context.WithValue(context.Background(), MockKey, mockPtr)
+		got, err := Execute(ctx, `{{ doit }}`, map[string]any{})
 		Expect(err).ToNot(HaveOccurred())
 		Expect(got).To(Equal("Value(anything)"))
 	})
