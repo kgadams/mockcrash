@@ -26,8 +26,8 @@ var _ = Describe("Crash", func() {
 		}
 		mockPtr.EXPECT().Do(mock.Anything).Return(val, nil)
 		ctx := context.WithValue(context.Background(), MockKey, mockPtr)
-		got, err := Execute(ctx, `{{ doit }}`, map[string]any{})
+		got, err := Execute(ctx, `{{ (doit).Parameter }}`, map[string]any{})
 		Expect(err).ToNot(HaveOccurred())
-		Expect(got).To(Equal("Value(anything)"))
+		Expect(got).To(Equal("anything"))
 	})
 })
